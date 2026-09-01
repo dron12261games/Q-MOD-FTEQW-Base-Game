@@ -1,0 +1,35 @@
+name: Build and publish artifacts
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Make shell scripts executable
+        run: chmod +x tasks/*.sh
+
+      - name: Publish package
+        run: ./tasks/Publish.sh
+
+      - name: Upload Windows artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: fteqw-base-game-windows
+          path: out/windows/**
+          if-no-files-found: error
+
+      - name: Upload Linux artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: fteqw-base-game-linux
+          path: out/linux/**
+          if-no-files-found: error
