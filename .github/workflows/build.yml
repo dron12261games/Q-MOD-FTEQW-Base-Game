@@ -23,16 +23,31 @@ jobs:
       - name: Publish package
         run: ./tasks/Publish.sh
 
+      - name: Set release metadata
+        run: |
+          VERSION_TAG="v$(date -u +'%Y.%m.%d')-r${{ github.run_number }}"
+          echo "RELEASE_VERSION=$VERSION_TAG" >> "$GITHUB_ENV"
+
+      - name: Create zip archives for build artifacts
+        run: |
+          mkdir -p release
+          if [ -d out/windows ]; then
+            (cd out && zip -r "../release/fteqw-base-game-windows-${RELEASE_VERSION}.zip" windows)
+          fi
+          if [ -d out/linux ]; then
+            (cd out && zip -r "../release/fteqw-base-game-linux-${RELEASE_VERSION}.zip" linux)
+          fi
+
       - name: Upload Windows artifact
         uses: actions/upload-artifact@v4
         with:
-          name: fteqw-base-game-windows
-          path: out/windows/**
+          name: fteqw-base-game-windows-${{ env.RELEASE_VERSION }}
+          path: release/fteqw-base-game-windows-${{ env.RELEASE_VERSION }}.zip
           if-no-files-found: error
 
       - name: Upload Linux artifact
         uses: actions/upload-artifact@v4
         with:
-          name: fteqw-base-game-linux
-          path: out/linux/**
+          name: fteqw-base-game-linux-${{ env.RELEASE_VERSION }}
+          path: release/fteqw-base-game-linux-${{ env.RELEASE_VERSION }}.zip
           if-no-files-found: error
