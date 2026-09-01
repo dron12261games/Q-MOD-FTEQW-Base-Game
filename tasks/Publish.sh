@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -eu
+set -eux
 shopt -s nullglob dotglob
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 log() {
@@ -31,6 +31,10 @@ copy_platform_files() {
   local platform="$1"
   local src_dir="$ROOT/$platform"
   local out_dir="$OUTROOT/$platform"
+
+  echo "[Publish] DEBUG src_dir=$src_dir out_dir=$out_dir"
+  ls -la "$ROOT/base" || true
+  ls -la "$src_dir" || true
 
   mkdir -p "$out_dir/base"
   copy_base_files "$out_dir/base"
