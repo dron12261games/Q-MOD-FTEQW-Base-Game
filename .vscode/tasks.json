@@ -16,7 +16,11 @@
       "group": {
         "kind": "build",
         "isDefault": true
-      }
+      },
+      "dependsOn": [
+        "Clean"
+      ],
+      "dependsOrder": "sequence"
     },
     {
       "label": "Publish",
@@ -32,6 +36,7 @@
       "problemMatcher": [],
       "group": "build",
       "dependsOn": [
+        "Clean Publish",
         "Build"
       ],
       "dependsOrder": "sequence"
