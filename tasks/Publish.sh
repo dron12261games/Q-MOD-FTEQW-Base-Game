@@ -45,8 +45,13 @@ copy_platform_files() {
 
   rm -rf "$out_dir/compiler"
 
-  [ -f "$ROOT/default.fmf" ] && cp "$ROOT/default.fmf" "$out_dir/"
-  [ -f "$ROOT/maptimes.txt" ] && cp "$ROOT/maptimes.txt" "$out_dir/"
+  if [ -f "$ROOT/default.fmf" ]; then
+    cp "$ROOT/default.fmf" "$out_dir/"
+  fi
+
+  if [ -f "$ROOT/maptimes.txt" ]; then
+    cp "$ROOT/maptimes.txt" "$out_dir/"
+  fi
 }
 
 log "[Publish] Packaging Windows build"
