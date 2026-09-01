@@ -1,2 +1,1 @@
-# Q-MOD-FTEQW-Base-Game
-FTEQW Gametemplate
+# FTEQW Basic game template
