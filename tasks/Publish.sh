@@ -17,18 +17,14 @@ copy_base_files() {
   local dst="$1"
   mkdir -p "$dst"
 
-  for item in "$ROOT/base"/*; do
-    [ -e "$item" ] || continue
-    name="${item##*/}"
-    case "$name" in
-      csqc|ssqc|progs.src|csprogs.src|progs.lno|csprogs.lno)
-        continue
-        ;;
-      *)
-        cp -a -- "$item" "$dst/"
-        ;;
-    esac
-  done
+  tar -C "$ROOT/base" \
+    --exclude='csqc' \
+    --exclude='ssqc' \
+    --exclude='progs.src' \
+    --exclude='csprogs.src' \
+    --exclude='progs.lno' \
+    --exclude='csprogs.lno' \
+    -cf - . | tar -C "$dst" -xf -
 }
 
 copy_platform_files() {
@@ -39,12 +35,9 @@ copy_platform_files() {
   mkdir -p "$out_dir/base"
   copy_base_files "$out_dir/base"
 
-  for item in "$src_dir"/*; do
-    [ -e "$item" ] || continue
-    name="${item##*/}"
-    [ "$name" = "compiler" ] && continue
-    cp -a -- "$item" "$out_dir/"
-  done
+  tar -C "$src_dir" \
+    --exclude='compiler' \
+    -cf - . | tar -C "$out_dir" -xf -
 
   rm -rf "$out_dir/compiler"
 
