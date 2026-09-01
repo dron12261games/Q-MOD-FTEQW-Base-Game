@@ -2,37 +2,37 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Compile server",
+      "label": "Compile only server",
       "type": "shell",
       "command": "${workspaceFolder}\\Compiler\\fteqcc64.exe",
       "args": [
         "-srcfile",
-        "${workspaceFolder}\\base\\progs.src"
+        "progs.src"
       ],
       "options": {
-        "cwd": "${workspaceFolder}"
+        "cwd": "${workspaceFolder}\\base"
       },
       "isBackground": false,
       "problemMatcher": [],
       "group": "build"
     },
     {
-      "label": "Compile client",
+      "label": "Compile only client",
       "type": "shell",
       "command": "${workspaceFolder}\\Compiler\\fteqcc64.exe",
       "args": [
         "-srcfile",
-        "${workspaceFolder}\\base\\csprogs.src"
+        "csprogs.src"
       ],
       "options": {
-        "cwd": "${workspaceFolder}"
+        "cwd": "${workspaceFolder}\\base"
       },
       "isBackground": false,
       "problemMatcher": [],
       "group": "build"
     },
     {
-      "label": "Compile mod",
+      "label": "Compile",
       "type": "shell",
       "command": "powershell",
       "args": [
@@ -40,7 +40,7 @@
         "-ExecutionPolicy",
         "Bypass",
         "-File",
-        "${workspaceFolder}\\build_both.ps1"
+        "${workspaceFolder}\\.vscode\\Compile.ps1"
       ],
       "options": {
         "cwd": "${workspaceFolder}"
@@ -53,6 +53,46 @@
       }
     },
     {
+      "label": "Compile + Run",
+      "type": "shell",
+      "command": "${workspaceFolder}\\fteqw64.exe",
+      "args": [
+        "-game",
+        "base"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "isBackground": false,
+      "problemMatcher": [],
+      "group": "build",
+      "dependsOn": [
+        "Compile"
+      ],
+      "dependsOrder": "sequence"
+    },
+    {
+      "label": "Compile + Run test map",
+      "type": "shell",
+      "command": "${workspaceFolder}\\fteqw64.exe",
+      "args": [
+        "-game",
+        "base",
+        "+map",
+        "testmap"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "isBackground": false,
+      "problemMatcher": [],
+      "group": "build",
+      "dependsOn": [
+        "Compile"
+      ],
+      "dependsOrder": "sequence"
+    },
+    {
       "label": "Clean build",
       "type": "shell",
       "command": "powershell",
@@ -60,8 +100,8 @@
         "-NoProfile",
         "-ExecutionPolicy",
         "Bypass",
-        "-Command",
-        "@('progs.dat','csprogs.dat') | ForEach-Object { $p = Join-Path '${workspaceFolder}' $_; if (Test-Path $p) { Remove-Item $p -Force } }"
+        "-File",
+        "${workspaceFolder}\\.vscode\\Clean build.ps1"
       ],
       "options": {
         "cwd": "${workspaceFolder}"
@@ -71,7 +111,7 @@
       "group": "build"
     },
     {
-      "label": "Run mod",
+      "label": "Run",
       "type": "shell",
       "command": "${workspaceFolder}\\fteqw64.exe",
       "args": [
@@ -85,7 +125,7 @@
       "problemMatcher": []
     },
     {
-      "label": "Run singleplayer",
+      "label": "Run test map",
       "type": "shell",
       "command": "${workspaceFolder}\\fteqw64.exe",
       "args": [
@@ -101,7 +141,7 @@
       "problemMatcher": []
     },
     {
-      "label": "Run server",
+      "label": "Run dedicated test server",
       "type": "shell",
       "command": "${workspaceFolder}\\fteqwsv64.exe",
       "args": [

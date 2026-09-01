@@ -2,7 +2,7 @@
 
 void(float apilevel, string enginename, float engineversion) CSQC_Init =
 {
-    print("AOM client: initialized\n");
+    print("Client: initialized\n");
 };
 
 void(float isnew) CSQC_Ent_Update =

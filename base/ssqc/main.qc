@@ -2,12 +2,12 @@
 
 void() main =
 {
-    dprint("AOM server: main loaded\n");
+    dprint("Server: main loaded\n");
 };
 
 void() worldspawn =
 {
-    dprint("AOM server: worldspawn\n");
+    dprint("Server: worldspawn\n");
 };
 
 void() player_prethink =
