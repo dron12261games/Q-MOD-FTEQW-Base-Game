@@ -1,7 +1,13 @@
 #!/usr/bin/env bash
 set -eu
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+log() {
+  echo "[$(date '+%Y-%m-%d %H:%M:%S.%3N')] $*"
+}
+
+log "[Publish] Cleaning previous output"
 "$ROOT/tasks/CleanPublish.sh"
+log "[Publish] Building fresh artifacts"
 "$ROOT/tasks/Build.sh"
 OUTROOT="$ROOT/out"
 rm -rf "$OUTROOT"
@@ -31,5 +37,10 @@ create_platform_copy() {
   [ -f "$ROOT/maptimes.txt" ] && cp "$ROOT/maptimes.txt" "$out_dir/"
 }
 
+log "[Publish] Packaging Windows build"
 create_platform_copy windows
+
+log "[Publish] Packaging Linux build"
 create_platform_copy linux
+
+log "[Publish] Success: packages created in $OUTROOT"
