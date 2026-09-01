@@ -2,46 +2,12 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Compile only server",
+      "label": "Build",
       "type": "shell",
-      "command": "${workspaceFolder}\\Compiler\\fteqcc64.exe",
-      "args": [
-        "-srcfile",
-        "progs.src"
-      ],
-      "options": {
-        "cwd": "${workspaceFolder}\\base"
+      "command": "${workspaceFolder}/tasks/Build.sh",
+      "windows": {
+        "command": "${workspaceFolder}\\tasks\\Build.bat"
       },
-      "isBackground": false,
-      "problemMatcher": [],
-      "group": "build"
-    },
-    {
-      "label": "Compile only client",
-      "type": "shell",
-      "command": "${workspaceFolder}\\Compiler\\fteqcc64.exe",
-      "args": [
-        "-srcfile",
-        "csprogs.src"
-      ],
-      "options": {
-        "cwd": "${workspaceFolder}\\base"
-      },
-      "isBackground": false,
-      "problemMatcher": [],
-      "group": "build"
-    },
-    {
-      "label": "Compile",
-      "type": "shell",
-      "command": "powershell",
-      "args": [
-        "-NoProfile",
-        "-ExecutionPolicy",
-        "Bypass",
-        "-File",
-        "${workspaceFolder}\\.vscode\\Compile.ps1"
-      ],
       "options": {
         "cwd": "${workspaceFolder}"
       },
@@ -53,13 +19,12 @@
       }
     },
     {
-      "label": "Compile + Run",
+      "label": "Publish",
       "type": "shell",
-      "command": "${workspaceFolder}\\fteqw64.exe",
-      "args": [
-        "-game",
-        "base"
-      ],
+      "command": "${workspaceFolder}/tasks/Publish.sh",
+      "windows": {
+        "command": "${workspaceFolder}\\tasks\\Publish.bat"
+      },
       "options": {
         "cwd": "${workspaceFolder}"
       },
@@ -67,42 +32,17 @@
       "problemMatcher": [],
       "group": "build",
       "dependsOn": [
-        "Compile"
+        "Build"
       ],
       "dependsOrder": "sequence"
     },
     {
-      "label": "Compile + Run test map",
+      "label": "Clean Publish",
       "type": "shell",
-      "command": "${workspaceFolder}\\fteqw64.exe",
-      "args": [
-        "-game",
-        "base",
-        "+map",
-        "testmap"
-      ],
-      "options": {
-        "cwd": "${workspaceFolder}"
+      "command": "${workspaceFolder}/tasks/CleanPublish.sh",
+      "windows": {
+        "command": "${workspaceFolder}\\tasks\\CleanPublish.bat"
       },
-      "isBackground": false,
-      "problemMatcher": [],
-      "group": "build",
-      "dependsOn": [
-        "Compile"
-      ],
-      "dependsOrder": "sequence"
-    },
-    {
-      "label": "Clean build",
-      "type": "shell",
-      "command": "powershell",
-      "args": [
-        "-NoProfile",
-        "-ExecutionPolicy",
-        "Bypass",
-        "-File",
-        "${workspaceFolder}\\.vscode\\Clean build.ps1"
-      ],
       "options": {
         "cwd": "${workspaceFolder}"
       },
@@ -111,50 +51,45 @@
       "group": "build"
     },
     {
-      "label": "Run",
+      "label": "Build & Launch",
       "type": "shell",
-      "command": "${workspaceFolder}\\fteqw64.exe",
-      "args": [
-        "-game",
-        "base"
-      ],
+      "command": "${workspaceFolder}/tasks/BuildAndLaunch.sh",
+      "windows": {
+        "command": "${workspaceFolder}\\tasks\\BuildAndLaunch.bat"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "isBackground": false,
+      "problemMatcher": [],
+      "group": "build"
+    },
+    {
+      "label": "Clean",
+      "type": "shell",
+      "command": "${workspaceFolder}/tasks/Clean.sh",
+      "windows": {
+        "command": "${workspaceFolder}\\tasks\\Clean.bat"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "isBackground": false,
+      "problemMatcher": [],
+      "group": "build"
+    },
+    {
+      "label": "Launch",
+      "type": "shell",
+      "command": "${workspaceFolder}/tasks/Launch.sh",
+      "windows": {
+        "command": "${workspaceFolder}\\tasks\\Launch.bat"
+      },
       "options": {
         "cwd": "${workspaceFolder}"
       },
       "isBackground": false,
       "problemMatcher": []
     },
-    {
-      "label": "Run test map",
-      "type": "shell",
-      "command": "${workspaceFolder}\\fteqw64.exe",
-      "args": [
-        "-game",
-        "base",
-        "+map",
-        "testmap"
-      ],
-      "options": {
-        "cwd": "${workspaceFolder}"
-      },
-      "isBackground": false,
-      "problemMatcher": []
-    },
-    {
-      "label": "Run dedicated test server",
-      "type": "shell",
-      "command": "${workspaceFolder}\\fteqwsv64.exe",
-      "args": [
-        "-game",
-        "base",
-        "+map",
-        "testmap"
-      ],
-      "options": {
-        "cwd": "${workspaceFolder}"
-      },
-      "isBackground": false,
-      "problemMatcher": []
-    }
   ]
 }
