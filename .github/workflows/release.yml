@@ -1,0 +1,77 @@
+name: Create GitHub release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Make shell scripts executable
+        run: |
+          chmod +x tasks/*.sh
+          chmod +x linux/compiler/*
+          chmod +x linux/fteqw* linux/fteqw-sdl2* 2>/dev/null || true
+
+      - name: Publish package
+        run: ./tasks/Publish.sh
+
+      - name: Upload Windows artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: fteqw-base-game-windows
+          path: out/windows/**
+          if-no-files-found: error
+
+      - name: Upload Linux artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: fteqw-base-game-linux
+          path: out/linux/**
+          if-no-files-found: error
+
+      - name: Generate release notes from last tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if git describe --tags --abbrev=0 >/dev/null 2>&1; then
+            LAST_TAG=$(git describe --tags --abbrev=0)
+            echo "BODY<<EOF" >> "$GITHUB_ENV"
+            echo "## Changes since $LAST_TAG" >> "$GITHUB_ENV"
+            git log "$LAST_TAG"..HEAD --pretty=format:'- %s (%h)' >> "$GITHUB_ENV"
+            echo "" >> "$GITHUB_ENV"
+            echo "## Artifacts" >> "$GITHUB_ENV"
+            echo "- Windows: fteqw-base-game-windows" >> "$GITHUB_ENV"
+            echo "- Linux: fteqw-base-game-linux" >> "$GITHUB_ENV"
+            echo "EOF" >> "$GITHUB_ENV"
+          else
+            echo "BODY<<EOF" >> "$GITHUB_ENV"
+            echo "## Changes" >> "$GITHUB_ENV"
+            git log -n 10 --pretty=format:'- %s (%h)' >> "$GITHUB_ENV"
+            echo "" >> "$GITHUB_ENV"
+            echo "## Artifacts" >> "$GITHUB_ENV"
+            echo "- Windows: fteqw-base-game-windows" >> "$GITHUB_ENV"
+            echo "- Linux: fteqw-base-game-linux" >> "$GITHUB_ENV"
+            echo "EOF" >> "$GITHUB_ENV"
+          fi
+
+      - name: Create GitHub Release as draft
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ github.run_number }}
+          name: v${{ github.run_number }}
+          body: ${{ env.BODY }}
+          files: |
+            out/windows/**
+            out/linux/**
+          draft: true
+          prerelease: false
+          generate_release_notes: true
