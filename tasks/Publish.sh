@@ -32,10 +32,6 @@ copy_platform_files() {
   local src_dir="$ROOT/$platform"
   local out_dir="$OUTROOT/$platform"
 
-  echo "[Publish] DEBUG src_dir=$src_dir out_dir=$out_dir"
-  ls -la "$ROOT/base" || true
-  ls -la "$src_dir" || true
-
   mkdir -p "$out_dir/base"
   copy_base_files "$out_dir/base"
 
