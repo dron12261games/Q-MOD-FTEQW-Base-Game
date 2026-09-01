@@ -38,6 +38,22 @@ jobs:
           path: out/linux/**
           if-no-files-found: error
 
+      - name: Set release metadata
+        run: |
+          VERSION_TAG="v$(date -u +'%Y.%m.%d')-r${{ github.run_number }}"
+          echo "RELEASE_VERSION=$VERSION_TAG" >> "$GITHUB_ENV"
+          echo "RELEASE_NAME=FTEQW Base Game $(date -u +'%Y.%m.%d') (run #${{ github.run_number }})" >> "$GITHUB_ENV"
+
+      - name: Create zip archives for release
+        run: |
+          mkdir -p release
+          if [ -d out/windows ]; then
+            (cd out && zip -r "../release/fteqw-base-game-windows-${RELEASE_VERSION}.zip" windows)
+          fi
+          if [ -d out/linux ]; then
+            (cd out && zip -r "../release/fteqw-base-game-linux-${RELEASE_VERSION}.zip" linux)
+          fi
+
       - name: Generate release notes from last tag
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -49,8 +65,8 @@ jobs:
             git log "$LAST_TAG"..HEAD --pretty=format:'- %s (%h)' >> "$GITHUB_ENV"
             echo "" >> "$GITHUB_ENV"
             echo "## Artifacts" >> "$GITHUB_ENV"
-            echo "- Windows: fteqw-base-game-windows" >> "$GITHUB_ENV"
-            echo "- Linux: fteqw-base-game-linux" >> "$GITHUB_ENV"
+            echo "- Windows: fteqw-base-game-windows-${RELEASE_VERSION}.zip" >> "$GITHUB_ENV"
+            echo "- Linux: fteqw-base-game-linux-${RELEASE_VERSION}.zip" >> "$GITHUB_ENV"
             echo "EOF" >> "$GITHUB_ENV"
           else
             echo "BODY<<EOF" >> "$GITHUB_ENV"
@@ -58,20 +74,28 @@ jobs:
             git log -n 10 --pretty=format:'- %s (%h)' >> "$GITHUB_ENV"
             echo "" >> "$GITHUB_ENV"
             echo "## Artifacts" >> "$GITHUB_ENV"
-            echo "- Windows: fteqw-base-game-windows" >> "$GITHUB_ENV"
-            echo "- Linux: fteqw-base-game-linux" >> "$GITHUB_ENV"
+            echo "- Windows: fteqw-base-game-windows-${RELEASE_VERSION}.zip" >> "$GITHUB_ENV"
+            echo "- Linux: fteqw-base-game-linux-${RELEASE_VERSION}.zip" >> "$GITHUB_ENV"
             echo "EOF" >> "$GITHUB_ENV"
           fi
 
       - name: Create GitHub Release as draft
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v${{ github.run_number }}
-          name: v${{ github.run_number }}
+          tag_name: ${{ env.RELEASE_VERSION }}
+          name: ${{ env.RELEASE_NAME }}
           body: ${{ env.BODY }}
           files: |
-            out/windows/**
-            out/linux/**
+            release/*.zip
           draft: true
           prerelease: false
           generate_release_notes: true
+
+      - name: Create and push git tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag "${RELEASE_VERSION}" || true
+          git push origin "${RELEASE_VERSION}" || true
