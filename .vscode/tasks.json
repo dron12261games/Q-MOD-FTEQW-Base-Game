@@ -16,11 +16,7 @@
       "group": {
         "kind": "build",
         "isDefault": true
-      },
-      "dependsOn": [
-        "Clean"
-      ],
-      "dependsOrder": "sequence"
+      }
     },
     {
       "label": "Publish",
@@ -34,12 +30,7 @@
       },
       "isBackground": false,
       "problemMatcher": [],
-      "group": "build",
-      "dependsOn": [
-        "Clean Publish",
-        "Build"
-      ],
-      "dependsOrder": "sequence"
+      "group": "build"
     },
     {
       "label": "Clean Publish",
@@ -47,20 +38,6 @@
       "command": "${workspaceFolder}/tasks/CleanPublish.sh",
       "windows": {
         "command": "${workspaceFolder}\\tasks\\CleanPublish.bat"
-      },
-      "options": {
-        "cwd": "${workspaceFolder}"
-      },
-      "isBackground": false,
-      "problemMatcher": [],
-      "group": "build"
-    },
-    {
-      "label": "Build & Launch",
-      "type": "shell",
-      "command": "${workspaceFolder}/tasks/BuildAndLaunch.sh",
-      "windows": {
-        "command": "${workspaceFolder}\\tasks\\BuildAndLaunch.bat"
       },
       "options": {
         "cwd": "${workspaceFolder}"
@@ -95,6 +72,6 @@
       },
       "isBackground": false,
       "problemMatcher": []
-    },
+    }
   ]
 }

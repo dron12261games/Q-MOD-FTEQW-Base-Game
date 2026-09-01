@@ -3,6 +3,9 @@ setlocal
 set "ROOT=%~dp0.."
 for %%I in ("%ROOT%") do set "ROOT=%%~fI"
 
+call "%ROOT%\tasks\CleanPublish.bat"
+call "%ROOT%\tasks\Build.bat"
+
 set "OUTROOT=%ROOT%\out"
 if exist "%OUTROOT%" rmdir /s /q "%OUTROOT%"
 

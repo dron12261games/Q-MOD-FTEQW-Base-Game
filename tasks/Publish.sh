@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -eu
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+"$ROOT/tasks/CleanPublish.sh"
+"$ROOT/tasks/Build.sh"
 OUTROOT="$ROOT/out"
 rm -rf "$OUTROOT"
 
