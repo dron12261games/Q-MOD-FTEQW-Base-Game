@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -eu
+shopt -s nullglob dotglob
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 log() {
   echo "[$(date '+%Y-%m-%d %H:%M:%S.%3N')] $*"
@@ -16,17 +17,18 @@ copy_base_files() {
   local dst="$1"
   mkdir -p "$dst"
 
-  while IFS= read -r -d '' item; do
-    name="$(basename "$item")"
+  for item in "$ROOT/base"/*; do
+    [ -e "$item" ] || continue
+    name="${item##*/}"
     case "$name" in
       csqc|ssqc|progs.src|csprogs.src|progs.lno|csprogs.lno)
         continue
         ;;
       *)
-        cp -a "$item" "$dst/"
+        cp -a -- "$item" "$dst/"
         ;;
     esac
-  done < <(find "$ROOT/base" -mindepth 1 -maxdepth 1 -print0)
+  done
 }
 
 copy_platform_files() {
@@ -37,9 +39,12 @@ copy_platform_files() {
   mkdir -p "$out_dir/base"
   copy_base_files "$out_dir/base"
 
-  while IFS= read -r -d '' item; do
-    cp -a "$item" "$out_dir/"
-  done < <(find "$src_dir" -mindepth 1 -maxdepth 1 -print0)
+  for item in "$src_dir"/*; do
+    [ -e "$item" ] || continue
+    name="${item##*/}"
+    [ "$name" = "compiler" ] && continue
+    cp -a -- "$item" "$out_dir/"
+  done
 
   rm -rf "$out_dir/compiler"
 
