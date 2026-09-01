@@ -17,14 +17,14 @@ copy_base_files() {
   local dst="$1"
   mkdir -p "$dst"
 
-  tar -C "$ROOT/base" \
-    --exclude='csqc' \
-    --exclude='ssqc' \
-    --exclude='progs.src' \
-    --exclude='csprogs.src' \
-    --exclude='progs.lno' \
-    --exclude='csprogs.lno' \
-    -cf - . | tar -C "$dst" -xf -
+  find "$ROOT/base" -mindepth 1 -maxdepth 1 \
+    ! -name 'csqc' \
+    ! -name 'ssqc' \
+    ! -name 'progs.src' \
+    ! -name 'csprogs.src' \
+    ! -name 'progs.lno' \
+    ! -name 'csprogs.lno' \
+    -exec cp -a -- {} "$dst/" \;
 }
 
 copy_platform_files() {
@@ -35,9 +35,9 @@ copy_platform_files() {
   mkdir -p "$out_dir/base"
   copy_base_files "$out_dir/base"
 
-  tar -C "$src_dir" \
-    --exclude='compiler' \
-    -cf - . | tar -C "$out_dir" -xf -
+  find "$src_dir" -mindepth 1 -maxdepth 1 \
+    ! -name 'compiler' \
+    -exec cp -a -- {} "$out_dir/" \;
 
   rm -rf "$out_dir/compiler"
 
