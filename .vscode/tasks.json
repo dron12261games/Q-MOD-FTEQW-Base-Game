@@ -1,0 +1,120 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Compile server",
+      "type": "shell",
+      "command": "${workspaceFolder}\\Compiler\\fteqcc64.exe",
+      "args": [
+        "-srcfile",
+        "${workspaceFolder}\\base\\progs.src"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "isBackground": false,
+      "problemMatcher": [],
+      "group": "build"
+    },
+    {
+      "label": "Compile client",
+      "type": "shell",
+      "command": "${workspaceFolder}\\Compiler\\fteqcc64.exe",
+      "args": [
+        "-srcfile",
+        "${workspaceFolder}\\base\\csprogs.src"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "isBackground": false,
+      "problemMatcher": [],
+      "group": "build"
+    },
+    {
+      "label": "Compile mod",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "${workspaceFolder}\\build_both.ps1"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "isBackground": false,
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Clean build",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "@('progs.dat','csprogs.dat') | ForEach-Object { $p = Join-Path '${workspaceFolder}' $_; if (Test-Path $p) { Remove-Item $p -Force } }"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "isBackground": false,
+      "problemMatcher": [],
+      "group": "build"
+    },
+    {
+      "label": "Run mod",
+      "type": "shell",
+      "command": "${workspaceFolder}\\fteqw64.exe",
+      "args": [
+        "-game",
+        "base"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "isBackground": false,
+      "problemMatcher": []
+    },
+    {
+      "label": "Run singleplayer",
+      "type": "shell",
+      "command": "${workspaceFolder}\\fteqw64.exe",
+      "args": [
+        "-game",
+        "base",
+        "+map",
+        "testmap"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "isBackground": false,
+      "problemMatcher": []
+    },
+    {
+      "label": "Run server",
+      "type": "shell",
+      "command": "${workspaceFolder}\\fteqwsv64.exe",
+      "args": [
+        "-game",
+        "base",
+        "+map",
+        "testmap"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "isBackground": false,
+      "problemMatcher": []
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+Path: .
+Working Copy Root Path: /home/spike/quake/fteqw-code
+URL: https://svn.code.sf.net/p/fteqw/code/trunk/engine
+Relative URL: ^/trunk/engine
+Repository Root: https://svn.code.sf.net/p/fteqw/code
+Repository UUID: fc73d0e0-1445-4013-8a0c-d673dee63da5
+Revision: 6202
+Node Kind: directory
+Schedule: normal
+Last Changed Author: acceptthis
+Last Changed Rev: 6202
+Last Changed Date: 2022-03-01 02:52:16 +0000 (Tue, 01 Mar 2022)
+
