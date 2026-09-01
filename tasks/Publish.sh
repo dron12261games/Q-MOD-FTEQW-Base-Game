@@ -12,29 +12,34 @@ log "[Publish] Building fresh artifacts"
 OUTROOT="$ROOT/out"
 rm -rf "$OUTROOT"
 
-create_platform_copy() {
-  local platform="$1"
-  local src_dir="$ROOT/$platform"
-  local out_dir="$OUTROOT/$platform"
-  mkdir -p "$out_dir/base"
+copy_base_files() {
+  local dst="$1"
+  mkdir -p "$dst"
 
-  for item in "$ROOT/base"/*; do
-    [ -e "$item" ] || continue
+  while IFS= read -r -d '' item; do
     name="$(basename "$item")"
     case "$name" in
       csqc|ssqc|progs.src|csprogs.src|progs.lno|csprogs.lno)
         continue
         ;;
       *)
-        cp -a "$item" "$out_dir/base/"
+        cp -a "$item" "$dst/"
         ;;
     esac
-  done
+  done < <(find "$ROOT/base" -mindepth 1 -maxdepth 1 -print0)
+}
 
-  for item in "$src_dir"/*; do
-    [ -e "$item" ] || continue
+copy_platform_files() {
+  local platform="$1"
+  local src_dir="$ROOT/$platform"
+  local out_dir="$OUTROOT/$platform"
+
+  mkdir -p "$out_dir/base"
+  copy_base_files "$out_dir/base"
+
+  while IFS= read -r -d '' item; do
     cp -a "$item" "$out_dir/"
-  done
+  done < <(find "$src_dir" -mindepth 1 -maxdepth 1 -print0)
 
   rm -rf "$out_dir/compiler"
 
@@ -43,9 +48,15 @@ create_platform_copy() {
 }
 
 log "[Publish] Packaging Windows build"
-create_platform_copy windows
+copy_platform_files windows || {
+  echo "ERROR: failed to package Windows build" >&2
+  exit 1
+}
 
 log "[Publish] Packaging Linux build"
-create_platform_copy linux
+copy_platform_files linux || {
+  echo "ERROR: failed to package Linux build" >&2
+  exit 1
+}
 
 log "[Publish] Success: packages created in $OUTROOT"
