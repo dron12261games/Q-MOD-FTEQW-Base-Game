@@ -19,6 +19,7 @@ create_platform_copy() {
   mkdir -p "$out_dir/base"
 
   for item in "$ROOT/base"/*; do
+    [ -e "$item" ] || continue
     name="$(basename "$item")"
     case "$name" in
       csqc|ssqc|progs.src|csprogs.src|progs.lno|csprogs.lno)
@@ -30,7 +31,11 @@ create_platform_copy() {
     esac
   done
 
-  cp -a "$src_dir/." "$out_dir/"
+  for item in "$src_dir"/*; do
+    [ -e "$item" ] || continue
+    cp -a "$item" "$out_dir/"
+  done
+
   rm -rf "$out_dir/compiler"
 
   [ -f "$ROOT/default.fmf" ] && cp "$ROOT/default.fmf" "$out_dir/"
