@@ -8,7 +8,7 @@ log() {
 log "[Build] Preparing Linux build environment"
 chmod +x "$ROOT/linux/compiler/"* "$ROOT/linux/"fteqw* 2>/dev/null || true
 "$ROOT/tasks/Clean.sh"
-cd "$ROOT/base"
+cd "$ROOT/base/src"
 
 log "[Build] Compiling progs.dat"
 set +e

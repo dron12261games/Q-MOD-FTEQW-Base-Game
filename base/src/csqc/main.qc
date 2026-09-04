@@ -1,4 +1,4 @@
-#include "../../include/genericdefs/fte_csqc_api.qc"
+#include "../../../include/genericdefs/fte_csqc_api.qc"
 
 void(float apilevel, string enginename, float engineversion) CSQC_Init =
 {

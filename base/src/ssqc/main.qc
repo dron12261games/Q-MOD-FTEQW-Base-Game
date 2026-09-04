@@ -1,4 +1,4 @@
-#include "../../include/genericdefs/ssqc_api.qc"
+#include "../../../include/genericdefs/ssqc_api.qc"
 
 void() main =
 {

@@ -18,14 +18,8 @@ copy_base_files() {
   mkdir -p "$dst"
 
   find "$ROOT/base" -mindepth 1 -maxdepth 1 \
-    ! -name 'csqc' \
-    ! -name 'ssqc' \
-    ! -name 'progs.src' \
-    ! -name 'csprogs.src' \
-    ! -name 'menu.src' \
-    ! -name 'progs.lno' \
-    ! -name 'csprogs.lno' \
-    ! -name 'menu.lno' \
+    ! -name 'src' \
+    ! -name '*.lno' \
     -exec cp -a -- {} "$dst/" \;
 }
 

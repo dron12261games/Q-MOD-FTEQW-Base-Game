@@ -6,7 +6,7 @@ for %%I in ("%ROOT%") do set "ROOT=%%~fI"
 call :log "[Build] Preparing Windows build environment"
 call "%ROOT%\tasks\Clean.bat"
 
-pushd "%ROOT%\base" || exit /b 1
+pushd "%ROOT%\base\src" || exit /b 1
 call :log "[Build] Compiling progs.dat"
 set "_tmp=%TEMP%\fteqcc_progs_%RANDOM%.log"
 "%ROOT%\windows\compiler\fteqcc64.exe" -DNOT_QSS= -DNOT_DP= -srcfile progs.src > "%_tmp%" 2>&1

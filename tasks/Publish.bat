@@ -17,11 +17,11 @@ mkdir "%WINOUT%\base" >nul
 mkdir "%LINOUT%\base" >nul
 
 call :log "[Publish] Packaging Windows build"
-robocopy "%ROOT%\base" "%WINOUT%\base" * /XD csqc ssqc /XF progs.src csprogs.src menu.src progs.lno csprogs.lno menu.lno /NFL /NDL /NJH /NJS >nul
+robocopy "%ROOT%\base" "%WINOUT%\base" * /XD src /XF *.lno /NFL /NDL /NJH /NJS >nul
 robocopy "%ROOT%\windows" "%WINOUT%" * /XD compiler /NFL /NDL /NJH /NJS >nul
 
 call :log "[Publish] Packaging Linux build"
-robocopy "%ROOT%\base" "%LINOUT%\base" * /XD csqc ssqc /XF progs.src csprogs.src menu.src progs.lno csprogs.lno menu.lno /NFL /NDL /NJH /NJS >nul
+robocopy "%ROOT%\base" "%LINOUT%\base" * /XD src /XF *.lno /NFL /NDL /NJH /NJS >nul
 robocopy "%ROOT%\linux" "%LINOUT%" * /XD compiler /NFL /NDL /NJH /NJS >nul
 
 if exist "%ROOT%\default.fmf" copy /Y "%ROOT%\default.fmf" "%WINOUT%\" >nul

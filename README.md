@@ -55,9 +55,10 @@ tasks\Build.bat
 The build process:
 
 - runs `Clean.sh` / `Clean.bat`
-- compiles `base/progs.src` to `base/progs.dat`
-- compiles `base/csprogs.src` to `base/csprogs.dat`
-- verifies both output files exist
+- compiles `base/src/progs.src` to `base/progs.dat`
+- compiles `base/src/csprogs.src` to `base/csprogs.dat`
+- compiles `base/src/menu.src` to `base/menu.dat`
+- verifies all output files exist in `base/`
 
 #### Publish package
 
@@ -206,8 +207,9 @@ tasks\Build.bat
 Что делает сборка:
 
 - запускает `Clean.sh` / `Clean.bat`
-- компилирует `base/progs.src` в `base/progs.dat`
-- компилирует `base/csprogs.src` в `base/csprogs.dat`
+- компилирует `base/src/progs.src` в `base/progs.dat`
+- компилирует `base/src/csprogs.src` в `base/csprogs.dat`
+- компилирует `base/src/menu.src` в `base/menu.dat`
 - проверяет наличие обоих файлов
 
 #### Публикация пакета
