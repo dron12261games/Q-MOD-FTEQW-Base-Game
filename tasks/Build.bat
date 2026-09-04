@@ -27,7 +27,17 @@ if not exist "%ROOT%\base\csprogs.dat" (
   exit /b 1
 )
 
-call :log "[Build] Success: progs.dat and csprogs.dat generated in %ROOT%\base"
+call :log "[Build] Compiling menu.dat"
+set "_tmp=%TEMP%\fteqcc_menu_%RANDOM%.log"
+"%ROOT%\windows\compiler\fteqcc64.exe" -DNOT_QSS= -DNOT_DP= -srcfile menu.src > "%_tmp%" 2>&1
+for /f "usebackq delims=" %%L in ("%_tmp%") do call :log "[Build] %%~L"
+del /f /q "%_tmp%" >nul 2>&1
+if not exist "%ROOT%\base\menu.dat" (
+  echo ERROR: menu.dat was not generated
+  exit /b 1
+)
+
+call :log "[Build] Success: progs.dat, csprogs.dat, and menu.dat generated in %ROOT%\base"
 popd
 endlocal
 exit /b 0

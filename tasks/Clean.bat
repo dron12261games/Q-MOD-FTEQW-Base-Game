@@ -4,7 +4,7 @@ set "ROOT=%~dp0.."
 for %%I in ("%ROOT%") do set "ROOT=%%~fI"
 
 call :log "[Clean] Removing generated build artifacts"
- del /f /q "%ROOT%\base\progs.dat" "%ROOT%\base\csprogs.dat" "%ROOT%\base\progs.lno" "%ROOT%\base\csprogs.lno" 2>nul
+ del /f /q "%ROOT%\base\progs.dat" "%ROOT%\base\csprogs.dat" "%ROOT%\base\menu.dat" "%ROOT%\base\progs.lno" "%ROOT%\base\csprogs.lno" "%ROOT%\base\menu.lno" 2>nul
 call :log "[Clean] Success: build artifacts removed"
 
 endlocal

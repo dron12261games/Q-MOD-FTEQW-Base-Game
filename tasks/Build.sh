@@ -48,4 +48,23 @@ if [ ! -f "$ROOT/base/csprogs.dat" ]; then
   exit 1
 fi
 
-log "[Build] Success: progs.dat and csprogs.dat generated in $ROOT/base"
+log "[Build] Compiling menu.dat"
+set +e
+log_file="$(mktemp)"
+"$ROOT/linux/compiler/fteqcc64" -DNOT_QSS= -DNOT_DP= -srcfile menu.src >"$log_file" 2>&1
+status=$?
+while IFS= read -r line; do
+  log "[Build] $line"
+done < "$log_file"
+rm -f "$log_file"
+set -e
+if [ "$status" -ne 0 ]; then
+  echo "ERROR: menu.dat compilation failed" >&2
+  exit 1
+fi
+if [ ! -f "$ROOT/base/menu.dat" ]; then
+  echo "ERROR: menu.dat was not generated" >&2
+  exit 1
+fi
+
+log "[Build] Success: progs.dat, csprogs.dat, and menu.dat generated in $ROOT/base"

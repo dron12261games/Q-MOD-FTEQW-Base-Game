@@ -22,8 +22,10 @@ copy_base_files() {
     ! -name 'ssqc' \
     ! -name 'progs.src' \
     ! -name 'csprogs.src' \
+    ! -name 'menu.src' \
     ! -name 'progs.lno' \
     ! -name 'csprogs.lno' \
+    ! -name 'menu.lno' \
     -exec cp -a -- {} "$dst/" \;
 }
 
@@ -43,10 +45,6 @@ copy_platform_files() {
 
   if [ -f "$ROOT/default.fmf" ]; then
     cp "$ROOT/default.fmf" "$out_dir/"
-  fi
-
-  if [ -f "$ROOT/maptimes.txt" ]; then
-    cp "$ROOT/maptimes.txt" "$out_dir/"
   fi
 }
 
